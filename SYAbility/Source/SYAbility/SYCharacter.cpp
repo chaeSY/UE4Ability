@@ -25,9 +25,6 @@ void ASYCharacter::BeginPlay()
 	{
 		AttributeSet = AbilitySystemComponent->GetSet<USYAttributeSet>();
 	}
-
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("%f"), GetHealth()));
-	
 }
 
 // Called every frame
@@ -35,6 +32,8 @@ void ASYCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	GEngine->ClearOnScreenDebugMessages();
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("%f"), GetHealth()));
 }
 
 // Called to bind functionality to input

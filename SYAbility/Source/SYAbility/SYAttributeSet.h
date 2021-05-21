@@ -23,5 +23,12 @@ public:
 	GAMEPLAYATTRIBUTE_VALUE_INITTER(Health);
 	GAMEPLAYATTRIBUTE_PROPERTY_GETTER(USYAttributeSet, Health);
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FGameplayAttributeData Damage;
+	GAMEPLAYATTRIBUTE_VALUE_GETTER(Damage);
+	GAMEPLAYATTRIBUTE_VALUE_SETTER(Damage);
+	GAMEPLAYATTRIBUTE_VALUE_INITTER(Damage);
+	GAMEPLAYATTRIBUTE_PROPERTY_GETTER(USYAttributeSet, Damage);
+
 	virtual void PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data);
 };
