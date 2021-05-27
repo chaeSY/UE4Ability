@@ -25,6 +25,8 @@ void ASYCharacter::BeginPlay()
 	{
 		AttributeSet = AbilitySystemComponent->GetSet<USYAttributeSet>();
 	}
+
+	InitAbility();
 }
 
 // Called every frame
@@ -56,4 +58,35 @@ float ASYCharacter::GetHealth() const
 	}
 
 	return -1.f;
+}
+
+void ASYCharacter::InitAbility()
+{
+	for (int i =0; i<AbilityClasses.Num(); ++i)
+	{
+		GrantAbility(AbilityClasses[i], 1, i);
+	}
+}
+
+void ASYCharacter::GrantAbility(TSubclassOf<UGameplayAbility> AbilityClass, int32 Level, int32 InputCode)
+{
+	if (IsValid(AbilitySystemComponent) && IsValid(AbilityClass))
+	{
+		UGameplayAbility* Ability = AbilityClass->GetDefaultObject<UGameplayAbility>();
+
+		if (IsValid(Ability))
+		{
+			FGameplayAbilitySpec Spec(Ability, Level, InputCode);
+			AbilitySystemComponent->GiveAbility(Spec);
+		}
+	}
+}
+
+void ASYCharacter::CancelAbility()
+{
+	if (IsValid(AbilitySystemComponent))
+	{
+		AbilitySystemComponent->CancelAllAbilities();
+	}
+
 }
