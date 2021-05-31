@@ -31,6 +31,7 @@ public:
 	// AbilitySystemComponent로 Interface의 기능을 사용할 수 있음
 
 //attribute
+public:
 	UPROPERTY()
 	const class USYAttributeSet* AttributeSet;
 
@@ -39,20 +40,17 @@ public:
 
 //ability
 public:
-	void InitAbility();
-
-	UFUNCTION(BlueprintCallable)
-	void GrantAbility(TSubclassOf<UGameplayAbility> AbilityClass, int32 Level, int32 InputCode);
-	
 	UFUNCTION(BlueprintCallable)
 	void CancelAbility();
 
+private:
+	void InitAbility();
+	void GrantAbility(TSubclassOf<UGameplayAbility> AbilityClass, int32 Level, int32 InputCode);
 
-public:
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
+private:
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	class UAbilitySystemComponent* AbilitySystemComponent;
 
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	TArray<TSubclassOf<UGameplayAbility>> AbilityClasses;
-
 };
