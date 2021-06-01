@@ -34,8 +34,8 @@ void ASYCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	GEngine->ClearOnScreenDebugMessages();
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("%f"), GetHealth()));
+	//GEngine->ClearOnScreenDebugMessages();
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("%f"), GetHealth()));
 }
 
 // Called to bind functionality to input
