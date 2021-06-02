@@ -38,6 +38,10 @@ public:
 	UFUNCTION(BlueprintPure)
 	float GetHealth() const;
 
+	UFUNCTION()
+	void OnHealthChanged() const;
+
+
 //ability
 public:
 	UFUNCTION(BlueprintCallable)

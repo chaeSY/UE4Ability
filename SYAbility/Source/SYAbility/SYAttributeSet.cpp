@@ -11,6 +11,6 @@ void USYAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallback
 
 	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
 	{
-
+		ChangedHealthEvent.Broadcast();
 	}
 }

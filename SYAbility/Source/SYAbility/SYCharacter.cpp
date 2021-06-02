@@ -24,6 +24,12 @@ void ASYCharacter::BeginPlay()
 	if (IsValid(AbilitySystemComponent))
 	{
 		AttributeSet = AbilitySystemComponent->GetSet<USYAttributeSet>();
+
+		// bind function
+		if (IsValid(AttributeSet))
+		{
+			AttributeSet->OnChangedHealth();// .AddUFunction(this, FName("OnHealthChanged"));
+		}
 	}
 
 	InitAbility();
@@ -58,6 +64,11 @@ float ASYCharacter::GetHealth() const
 	}
 
 	return -1.f;
+}
+
+void ASYCharacter::OnHealthChanged() const
+{
+	
 }
 
 void ASYCharacter::InitAbility()
