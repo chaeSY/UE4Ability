@@ -13,6 +13,7 @@
 
 DECLARE_EVENT(USYAttributeSet, FAttributeChangedEvent);
 
+
 UCLASS()
 class SYABILITY_API USYAttributeSet : public UAttributeSet
 {
@@ -26,10 +27,14 @@ public:
 	GAMEPLAYATTRIBUTE_VALUE_INITTER(Health);
 	GAMEPLAYATTRIBUTE_PROPERTY_GETTER(USYAttributeSet, Health);
 
-	const FAttributeChangedEvent& OnChangedHealth() const { return ChangedHealthEvent; }
-	FAttributeChangedEvent ChangedHealthEvent;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FGameplayAttributeData MaxHealth;
+	GAMEPLAYATTRIBUTE_VALUE_GETTER(MaxHealth);
+	GAMEPLAYATTRIBUTE_VALUE_SETTER(MaxHealth);
+	GAMEPLAYATTRIBUTE_VALUE_INITTER(MaxHealth);
+	GAMEPLAYATTRIBUTE_PROPERTY_GETTER(USYAttributeSet, MaxHealth);
 
-public:
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FGameplayAttributeData Damage;
 	GAMEPLAYATTRIBUTE_VALUE_GETTER(Damage);

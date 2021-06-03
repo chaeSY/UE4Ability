@@ -4,6 +4,10 @@
 #include "SYCharacter.h"
 #include "AbilitySystemComponent.h"
 #include "SYAttributeSet.h"
+#include "SYPlayerController.h"
+#include "Blueprint/UserWidget.h"
+#include "Components/ProgressBar.h"
+#include "Components/TextBlock.h"
 
 // Sets default values
 ASYCharacter::ASYCharacter()
@@ -21,18 +25,15 @@ void ASYCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	// ability
 	if (IsValid(AbilitySystemComponent))
 	{
 		AttributeSet = AbilitySystemComponent->GetSet<USYAttributeSet>();
-
-		// bind function
-		if (IsValid(AttributeSet))
-		{
-			AttributeSet->OnChangedHealth();// .AddUFunction(this, FName("OnHealthChanged"));
-		}
 	}
 
 	InitAbility();
+
+	UpdateHUD();
 }
 
 // Called every frame
@@ -56,6 +57,38 @@ UAbilitySystemComponent* ASYCharacter::GetAbilitySystemComponent() const
 	return AbilitySystemComponent;
 }
 
+void ASYCharacter::UpdateHUD() const
+{
+	ASYPlayerController* controller = GetController<ASYPlayerController>();
+	if (!IsValid(controller))
+		return;
+
+	UUserWidget* hud = controller->GetHUD();
+	if (!IsValid(hud))
+		return;
+
+	UUserWidget* HealthBar = Cast<UUserWidget>(hud->GetWidgetFromName(FName("WB_HealthBar")));
+	if (IsValid(HealthBar))
+	{
+		UProgressBar* progressbar = Cast<UProgressBar>(HealthBar->GetWidgetFromName(FName("PB_HP")));
+		if (IsValid(progressbar))
+		{
+			float percent = GetHealth() / GetMaxHealth();
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Percent: %f"), percent));
+			progressbar->SetPercent(percent);
+		}
+
+		UTextBlock* tb = Cast<UTextBlock>(HealthBar->GetWidgetFromName(FName("TB_HP")));
+		if (IsValid(tb))
+		{
+			FString s = FString::Printf(TEXT("HP: %.0f / %.0f"), GetHealth(), GetMaxHealth());
+			FText t = FText::FromString(s);
+			tb->SetText(t);
+		}
+	}
+
+}
+
 float ASYCharacter::GetHealth() const
 {
 	if (IsValid(AttributeSet))
@@ -66,9 +99,19 @@ float ASYCharacter::GetHealth() const
 	return -1.f;
 }
 
-void ASYCharacter::OnHealthChanged() const
+float ASYCharacter::GetMaxHealth() const
 {
-	
+	if (IsValid(AttributeSet))
+	{
+		return AttributeSet->GetMaxHealth();
+	}
+
+	return -1.f;
+}
+
+void ASYCharacter::HandleChangedHealth(float DeltaHealth)
+{
+	UpdateHUD();
 }
 
 void ASYCharacter::InitAbility()

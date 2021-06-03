@@ -20,11 +20,4 @@ class SYABILITY_API ASYGameModeBase : public AGameModeBase
 public:
 	ASYGameModeBase();
 	virtual void BeginPlay() override;
-
-public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<UUserWidget> SYHUDClass;
-	
-	UPROPERTY()
-	UUserWidget* SYHUD;
 };

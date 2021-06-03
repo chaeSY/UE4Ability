@@ -9,6 +9,7 @@
 
 class UAbilitySystemComponent;
 class UGameplayAbility;
+class USYAttributeSet;
 
 UCLASS()
 class SYABILITY_API ASYCharacter : public ACharacter, public IAbilitySystemInterface
@@ -30,16 +31,22 @@ public:
 	// IAbilitySystemInterface는 GetAbilitySystemComponent 상속을 강제함
 	// AbilitySystemComponent로 Interface의 기능을 사용할 수 있음
 
+public:
+	void UpdateHUD() const;
+
 //attribute
 public:
-	UPROPERTY()
-	const class USYAttributeSet* AttributeSet;
-
 	UFUNCTION(BlueprintPure)
 	float GetHealth() const;
 
-	UFUNCTION()
-	void OnHealthChanged() const;
+	UFUNCTION(BlueprintPure)
+	float GetMaxHealth() const;
+
+	void HandleChangedHealth(float DeltaHealth);
+
+private:
+	UPROPERTY()
+	const class USYAttributeSet* AttributeSet;
 
 
 //ability
