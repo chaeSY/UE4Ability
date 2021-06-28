@@ -41,8 +41,6 @@ void ASYCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	//GEngine->ClearOnScreenDebugMessages();
-	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("%f"), GetHealth()));
 }
 
 // Called to bind functionality to input
@@ -74,7 +72,6 @@ void ASYCharacter::UpdateHUD() const
 		if (IsValid(progressbar))
 		{
 			float percent = GetHealth() / GetMaxHealth();
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Percent: %f"), percent));
 			progressbar->SetPercent(percent);
 		}
 
@@ -109,9 +106,40 @@ float ASYCharacter::GetMaxHealth() const
 	return -1.f;
 }
 
+float ASYCharacter::GetStamina() const
+{
+	if (IsValid(AttributeSet))
+	{
+		return AttributeSet->GetStamina();
+	}
+
+	return -1.f;
+}
+
+float ASYCharacter::GetMaxStamina() const
+{
+	if (IsValid(AttributeSet))
+	{
+		return AttributeSet->GetMaxStamina();
+	}
+
+	return -1.f;
+}
+
 void ASYCharacter::HandleChangedHealth(float DeltaHealth)
 {
-	UpdateHUD();
+	if (OnChangedHealth.IsBound())
+	{
+		OnChangedHealth.Broadcast(DeltaHealth);
+	}
+}
+
+void ASYCharacter::HandleChangedStamina(float DeltaStamina)
+{
+	if (OnChangedStamina.IsBound())
+	{
+		OnChangedStamina.Broadcast(DeltaStamina);
+	}
 }
 
 void ASYCharacter::InitAbility()
@@ -119,6 +147,18 @@ void ASYCharacter::InitAbility()
 	for (int i =0; i<AbilityClasses.Num(); ++i)
 	{
 		GrantAbility(AbilityClasses[i], 1, i);
+	}
+
+
+	// apply passive gameplay effect
+	for (TSubclassOf<UGameplayEffect> GEClass : PassiveAbilityEffects)
+	{
+		if (IsValid(AbilitySystemComponent))
+		{
+			UGameplayEffect* e = GEClass->GetDefaultObject<UGameplayEffect>();
+			FGameplayEffectContextHandle h = AbilitySystemComponent->MakeEffectContext();
+			AbilitySystemComponent->ApplyGameplayEffectToSelf(e, 1, h);
+		}
 	}
 }
 

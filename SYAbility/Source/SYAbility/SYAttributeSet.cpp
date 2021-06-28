@@ -14,7 +14,6 @@ void USYAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallback
 	AController* TargetController = nullptr;
 	ASYCharacter* TargetCharacter = nullptr;
 
-
 	// Compute the delta between old and new, if it is available
 	float DeltaValue = 0;
 	if (Data.EvaluatedData.ModifierOp == EGameplayModOp::Type::Additive)
@@ -34,9 +33,20 @@ void USYAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallback
 	{
 		if (TargetCharacter)
 		{
-			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Health: %f"), GetHealth()));
-			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Delta: %f"), DeltaValue));
-			TargetCharacter->HandleChangedHealth(DeltaValue);
+			float resultHealth = FMath::Clamp(GetHealth(), 0.f, GetMaxHealth());
+			float delta = GetHealth() - resultHealth;
+			SetHealth(resultHealth);
+			TargetCharacter->HandleChangedHealth(delta);
+		}
+	}
+	else if (Data.EvaluatedData.Attribute == GetStaminaAttribute())
+	{
+		if (TargetCharacter)
+		{
+			float resultStamina = FMath::Clamp(GetStamina(), 0.f, GetMaxStamina());
+			float delta = GetStamina() - resultStamina;
+			SetStamina(resultStamina);
+			TargetCharacter->HandleChangedStamina(delta);
 		}
 	}
 }

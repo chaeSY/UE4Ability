@@ -10,7 +10,7 @@
 void ASYPlayerController::OnPossess(APawn* aPawn)
 {
 	Super::OnPossess(aPawn);
-	InitHUD(aPawn);
+	//InitHUD(aPawn);
 }
 
 void ASYPlayerController::InitHUD(APawn* InPawn)
@@ -27,13 +27,6 @@ void ASYPlayerController::InitHUD(APawn* InPawn)
 		if (IsValid(HUDWidget))
 		{
 			HUDWidget->AddToViewport();
-		}
-
-		//ASYCharacter* ch = Cast<ASYCharacter>(InPawn);
-		//if (IsValid(ch))
-		//{
-		//	//Character->
-		//}
-		
+		}		
 	}
 }

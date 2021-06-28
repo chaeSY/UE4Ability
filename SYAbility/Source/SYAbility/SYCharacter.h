@@ -9,7 +9,10 @@
 
 class UAbilitySystemComponent;
 class UGameplayAbility;
+class UGameplayEffect;
 class USYAttributeSet;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAttributeChanged, int32, DeltaAttribute);
 
 UCLASS()
 class SYABILITY_API ASYCharacter : public ACharacter, public IAbilitySystemInterface
@@ -42,12 +45,24 @@ public:
 	UFUNCTION(BlueprintPure)
 	float GetMaxHealth() const;
 
+	UFUNCTION(BlueprintPure)
+	float GetStamina() const;
+
+	UFUNCTION(BlueprintPure)
+	float GetMaxStamina() const;
+
 	void HandleChangedHealth(float DeltaHealth);
+	void HandleChangedStamina(float DeltaStamina);
+
+	UPROPERTY(Category = "SYAttribute", BlueprintAssignable, BlueprintCallable)
+	FOnAttributeChanged OnChangedHealth;
+
+	UPROPERTY(Category = "SYAttribute", BlueprintAssignable, BlueprintCallable)
+	FOnAttributeChanged OnChangedStamina;
 
 private:
 	UPROPERTY()
 	const class USYAttributeSet* AttributeSet;
-
 
 //ability
 public:
@@ -64,4 +79,8 @@ private:
 
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	TArray<TSubclassOf<UGameplayAbility>> AbilityClasses;
+
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	TArray<TSubclassOf<UGameplayEffect>> PassiveAbilityEffects;
+
 };

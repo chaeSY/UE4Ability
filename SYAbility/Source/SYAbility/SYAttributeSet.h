@@ -11,9 +11,6 @@
  * 
  */
 
-DECLARE_EVENT(USYAttributeSet, FAttributeChangedEvent);
-
-
 UCLASS()
 class SYABILITY_API USYAttributeSet : public UAttributeSet
 {
@@ -30,7 +27,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FGameplayAttributeData MaxHealth;
 	GAMEPLAYATTRIBUTE_VALUE_GETTER(MaxHealth);
-	GAMEPLAYATTRIBUTE_VALUE_SETTER(MaxHealth);
 	GAMEPLAYATTRIBUTE_VALUE_INITTER(MaxHealth);
 	GAMEPLAYATTRIBUTE_PROPERTY_GETTER(USYAttributeSet, MaxHealth);
 
@@ -41,6 +37,19 @@ public:
 	GAMEPLAYATTRIBUTE_VALUE_SETTER(Damage);
 	GAMEPLAYATTRIBUTE_VALUE_INITTER(Damage);
 	GAMEPLAYATTRIBUTE_PROPERTY_GETTER(USYAttributeSet, Damage);
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FGameplayAttributeData Stamina;
+	GAMEPLAYATTRIBUTE_VALUE_GETTER(Stamina);
+	GAMEPLAYATTRIBUTE_VALUE_SETTER(Stamina);
+	GAMEPLAYATTRIBUTE_VALUE_INITTER(Stamina);
+	GAMEPLAYATTRIBUTE_PROPERTY_GETTER(USYAttributeSet, Stamina);
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FGameplayAttributeData MaxStamina;
+	GAMEPLAYATTRIBUTE_VALUE_GETTER(MaxStamina);
+	GAMEPLAYATTRIBUTE_VALUE_INITTER(MaxStamina);
+	GAMEPLAYATTRIBUTE_PROPERTY_GETTER(USYAttributeSet, MaxStamina);
 
 	virtual void PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data);
 };
