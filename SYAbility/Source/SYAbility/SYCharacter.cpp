@@ -32,8 +32,6 @@ void ASYCharacter::BeginPlay()
 	}
 
 	InitAbility();
-
-	UpdateHUD();
 }
 
 // Called every frame
@@ -142,13 +140,20 @@ void ASYCharacter::HandleChangedStamina(float DeltaStamina)
 	}
 }
 
+void ASYCharacter::HandleDamage(float DamageAmount, AActor* DamageCauser)
+{
+	if (OnDamaged.IsBound())
+	{
+		OnDamaged.Broadcast(DamageAmount, DamageCauser);
+	}
+}
+
 void ASYCharacter::InitAbility()
 {
 	for (int i =0; i<AbilityClasses.Num(); ++i)
 	{
 		GrantAbility(AbilityClasses[i], 1, i);
 	}
-
 
 	// apply passive gameplay effect
 	for (TSubclassOf<UGameplayEffect> GEClass : PassiveAbilityEffects)
@@ -157,7 +162,10 @@ void ASYCharacter::InitAbility()
 		{
 			UGameplayEffect* e = GEClass->GetDefaultObject<UGameplayEffect>();
 			FGameplayEffectContextHandle h = AbilitySystemComponent->MakeEffectContext();
-			AbilitySystemComponent->ApplyGameplayEffectToSelf(e, 1, h);
+			if (e)
+			{
+				AbilitySystemComponent->ApplyGameplayEffectToSelf(e, 1, h);
+			}
 		}
 	}
 }

@@ -13,6 +13,7 @@ class UGameplayEffect;
 class USYAttributeSet;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAttributeChanged, int32, DeltaAttribute);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnDamaged, int32, DamageAmount, AActor*, DamageCauser);
 
 UCLASS()
 class SYABILITY_API ASYCharacter : public ACharacter, public IAbilitySystemInterface
@@ -53,12 +54,16 @@ public:
 
 	void HandleChangedHealth(float DeltaHealth);
 	void HandleChangedStamina(float DeltaStamina);
+	void HandleDamage(float DamageAmount, AActor* DamageCauser);
 
 	UPROPERTY(Category = "SYAttribute", BlueprintAssignable, BlueprintCallable)
 	FOnAttributeChanged OnChangedHealth;
 
 	UPROPERTY(Category = "SYAttribute", BlueprintAssignable, BlueprintCallable)
 	FOnAttributeChanged OnChangedStamina;
+
+	UPROPERTY(Category = "SYAttribute", BlueprintAssignable, BlueprintCallable)
+	FOnDamaged OnDamaged;
 
 private:
 	UPROPERTY()

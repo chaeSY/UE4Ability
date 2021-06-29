@@ -29,7 +29,26 @@ void USYAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallback
 		TargetCharacter = Cast<ASYCharacter>(TargetActor);
 	}
 
-	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
+	if (Data.EvaluatedData.Attribute == GetDamageAttribute())
+	{
+		FGameplayEffectContextHandle Context = Data.EffectSpec.GetContext();
+		UAbilitySystemComponent* Source = Context.GetOriginalInstigatorAbilitySystemComponent();
+		if (Source && Source->AbilityActorInfo.IsValid() && Source->AbilityActorInfo->AvatarActor.IsValid())
+		{
+			AActor* DamageCauser = Source->AbilityActorInfo->AvatarActor.Get();
+			TargetCharacter->HandleDamage(GetDamage(), DamageCauser);
+			SetDamage(0);
+
+			float oldHealth = GetHealth();
+			float resultHealth = GetHealth() - GetDamage();
+			resultHealth = FMath::Clamp(resultHealth, 0.f, GetMaxHealth());
+			SetHealth(resultHealth);
+
+			float healthDelta = oldHealth - GetHealth();
+			TargetCharacter->HandleChangedHealth(healthDelta);
+		}
+	}
+	else if (Data.EvaluatedData.Attribute == GetHealthAttribute())
 	{
 		if (TargetCharacter)
 		{
