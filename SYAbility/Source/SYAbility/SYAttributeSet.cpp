@@ -36,16 +36,18 @@ void USYAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallback
 		if (Source && Source->AbilityActorInfo.IsValid() && Source->AbilityActorInfo->AvatarActor.IsValid())
 		{
 			AActor* DamageCauser = Source->AbilityActorInfo->AvatarActor.Get();
-			TargetCharacter->HandleDamage(GetDamage(), DamageCauser);
-			SetDamage(0);
+
+			float DamageAmount = GetDamage();
+			TargetCharacter->HandleDamage(DamageAmount, DamageCauser);
 
 			float oldHealth = GetHealth();
-			float resultHealth = GetHealth() - GetDamage();
-			resultHealth = FMath::Clamp(resultHealth, 0.f, GetMaxHealth());
-			SetHealth(resultHealth);
+			float resultHealth = FMath::Clamp(oldHealth - DamageAmount, 0.f, GetMaxHealth());
+			float healthDelta = oldHealth - resultHealth;
 
-			float healthDelta = oldHealth - GetHealth();
-			TargetCharacter->HandleChangedHealth(healthDelta);
+			SetHealth(resultHealth);
+			TargetCharacter->HandleChangedHealth(-healthDelta);
+
+			SetDamage(0);
 		}
 	}
 	else if (Data.EvaluatedData.Attribute == GetHealthAttribute())
